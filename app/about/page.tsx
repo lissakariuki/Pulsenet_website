@@ -17,93 +17,94 @@ import {
   Shield,
   Zap,
   Globe,
+  ArrowRight,
+  Star,
+  CheckCircle,
+  Lightbulb,
+  Rocket,
+  Menu,
+  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-// You need to create these components or use your own
 import { AnimatedCounter } from "@/components/animated-counter"
 import { FloatingElements } from "@/components/floating-elements"
+import Link from "next/link"
 
-const milestones = [
-  {
-    year: "2018",
-    title: "Company Founded",
-    description: "Started with a vision to bridge Kenya's digital divide",
-    icon: Calendar,
-  },
-  {
-    year: "2019",
-    title: "First 1,000 Customers",
-    description: "Reached our first major milestone in customer growth",
-    icon: Users,
-  },
-  {
-    year: "2021",
-    title: "Network Expansion",
-    description: "Expanded fiber network to 15 major cities across Kenya",
-    icon: MapPin,
-  },
-  {
-    year: "2023",
-    title: "50,000+ Connected",
-    description: "Serving over 50,000 homes and businesses nationwide",
-    icon: TrendingUp,
-  },
-]
-
-const teamMembers = [
-  {
-    name: "Sarah Kimani",
-    role: "Chief Executive Officer",
-    image: "/placeholder.svg?height=300&width=300",
-    bio: "15+ years in telecommunications with a passion for digital inclusion",
-  },
-  {
-    name: "David Ochieng",
-    role: "Chief Technology Officer",
-    image: "/placeholder.svg?height=300&width=300",
-    bio: "Network infrastructure expert with extensive fiber optic experience",
-  },
-  {
-    name: "Grace Wanjiku",
-    role: "Head of Customer Success",
-    image: "/placeholder.svg?height=300&width=300",
-    bio: "Dedicated to ensuring exceptional customer experiences and satisfaction",
-  },
+const stats = [
+  { number: 500, suffix: "+", label: "Connected Homes", icon: Users },
+  { number: 5, suffix: "+", label: "Cities Covered", icon: MapPin },
+  { number: 99, suffix: "%", label: "Uptime SLA", icon: Shield },
+  { number: 100, suffix: "Mbps", label: "Max Speed", icon: Zap },
 ]
 
 const values = [
   {
-    icon: Shield,
-    title: "Reliability",
-    description: "99.9% uptime guarantee with enterprise-grade infrastructure",
-    color: "bg-blue-500",
+    icon: Rocket,
+    title: "Innovation First",
+    description: "Pioneering next-generation fiber technology to deliver unmatched internet experiences.",
+    gradient: "from-blue-500 to-cyan-500",
   },
   {
-    icon: Zap,
-    title: "Innovation",
-    description: "Cutting-edge technology to deliver the fastest speeds",
-    color: "bg-yellow-500",
+    icon: Shield,
+    title: "Reliability",
+    description: "Enterprise-grade infrastructure ensuring 99% uptime with 24/7 monitoring.",
+    gradient: "from-green-500 to-emerald-500",
   },
   {
     icon: Heart,
-    title: "Community",
-    description: "Building stronger communities through better connectivity",
-    color: "bg-red-500",
+    title: "Community Impact",
+    description: "Empowering local communities through digital inclusion and economic growth.",
+    gradient: "from-red-500 to-pink-500",
   },
   {
-    icon: Globe,
-    title: "Accessibility",
-    description: "Making high-speed internet accessible to everyone",
+    icon: Lightbulb,
+    title: "Customer Success",
+    description: "Dedicated support and personalized solutions that exceed expectations.",
+    gradient: "from-yellow-500 to-orange-500",
+  },
+]
+
+const timeline = [
+  {
+    year: "2023",
+    title: "Foundation & Vision",
+    description: "PulseNet was founded with a mission to democratize high-speed internet access across Kenya.",
+    achievement: "Secured initial funding and regulatory approvals",
+    color: "bg-blue-500",
+  },
+  {
+    year: "2024",
+    title: "Network Launch",
+    description: "Deployed our first fiber network in Nairobi, connecting 500+ customers in the first quarter.",
+    achievement: "Achieved 98% customer satisfaction rating",
     color: "bg-green-500",
+  },
+  {
+    year: "2024",
+    title: "Rapid Expansion",
+    description: "Expanded to 5 major areas with strategic partnerships and infrastructure investments.",
+    achievement: "Reached 500 active subscribers",
+    color: "bg-purple-500",
+  },
+  {
+    year: "2025",
+    title: "Growing Strong",
+    description: "Becoming Kenya's fastest-growing ISP with cutting-edge technology and exceptional service.",
+    achievement: "500+ customers and industry recognition",
+    color: "bg-orange-500",
   },
 ]
 
 export default function AboutPage() {
   const { scrollYProgress } = useScroll()
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState(0)
+
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.8])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,254 +124,353 @@ export default function AboutPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4">
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      {/* Enhanced Navigation */}
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-xl z-50 border-b border-gray-100/50">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Wifi className="w-5 h-5 text-white" />
+            <motion.div
+              className="flex items-center gap-3"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Wifi className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">PulseNet</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                PulseNet
+              </span>
+            </motion.div>
+
+            <div className="hidden lg:flex items-center gap-8">
+              {[
+                { name: "Home", href: "/" },
+                { name: "About", href: "/about" },
+                { name: "Coverage", href: "/coverage" },
+                { name: "Contact", href: "/contact" },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Link
+                    href={item.href}
+                    className={`text-gray-600 hover:text-blue-600 transition-colors font-medium ${
+                      item.name === "About" ? "text-blue-600" : ""
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
+              ))}
             </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Home
-              </a>
-              <a href="#" className="text-blue-600 font-medium">
-                About
-              </a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Coverage
-              </a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Contact
-              </a>
+
+            <div className="flex items-center gap-4">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
+                  Get Connected
+                </Button>
+              </motion.div>
+
+              <button 
+                className="lg:hidden p-2" 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                <motion.div
+                  animate={{ rotate: isMenuOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </motion.div>
+              </button>
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Connected</Button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800"
-          style={{ y }}
-        />
-        <FloatingElements />
+        <motion.div className="absolute inset-0" style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800" />
+          <FloatingElements />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </motion.div>
 
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <Badge className="mb-6 bg-white/20 text-white border-white/30 hover:bg-white/30">
-              Connecting Kenya Since 2018
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              About{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-                PulseNet
+        <div className="relative z-10 text-center text-white px-6 max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.215, 0.61, 0.355, 1] }}
+          >
+            <motion.div
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-3 rounded-full mb-8"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Star className="w-5 h-5 text-yellow-400" />
+              <span className="text-sm font-medium">Kenya's Growing ISP</span>
+            </motion.div>
+
+            <motion.h1 
+              className="text-6xl md:text-8xl font-bold mb-8 leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <span className="block">Connecting</span>
+              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Tomorrow
               </span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Bridging the digital divide across Kenya with reliable, high-speed fiber internet that empowers
-              communities to thrive in the digital age.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                <Play className="w-5 h-5 mr-2" />
-                Watch Our Story
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+            </motion.h1>
+
+            <motion.p
+              className="text-xl md:text-2xl mb-12 text-blue-100 max-w-4xl mx-auto leading-relaxed font-light"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Pioneering Kenya's digital future with ultra-fast fiber internet that empowers communities, businesses,
+              and dreams to flourish in the connected age.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                Explore Coverage
-              </Button>
-            </div>
+                <Link href="/coverage">
+                  <Button
+                    size="lg"
+                    className="bg-white text-gray-900 hover:bg-gray-100 shadow-2xl px-8 py-4 text-lg font-semibold"
+                  >
+                    Explore Coverage
+                    <ArrowRight className="w-6 h-6 ml-3" />
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+          className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 12, 0] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-8 h-8 text-white/70" />
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse" />
+          </div>
         </motion.div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gray-50" data-section>
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { number: 50000, suffix: "+", label: "Happy Customers" },
-              { number: 25, suffix: "+", label: "Cities Covered" },
-              { number: 99.9, suffix: "%", label: "Uptime Guarantee" },
-              { number: 1000, suffix: "Mbps", label: "Max Speed" },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
-                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
-                </div>
-                <p className="text-gray-600 font-medium">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story Section */}
-      <section className="py-20" data-section>
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">Our Journey</Badge>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Connecting Communities, One Fiber at a Time</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
-                <p>
-                  Founded with a vision to bridge the digital divide in Kenya, PulseNet has been at the forefront of
-                  providing reliable, high-speed fiber internet solutions to homes and businesses across the country.
-                </p>
-                <p>
-                  Since our inception, we've connected thousands of customers, enabling them to work, learn, and stay
-                  connected with the world. Our commitment to excellence and customer satisfaction has made us a trusted
-                  name in the telecommunications industry.
-                </p>
-                <p>
-                  We believe that fast, reliable internet is not a luxury but a necessity in today's digital world.
-                  That's why we continue to expand our network and improve our services to reach every corner of Kenya.
-                </p>
-              </div>
-              <Button className="mt-6 bg-blue-600 hover:bg-blue-700">Learn More About Our Impact</Button>
-            </motion.div>
-
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src="/placeholder.svg?height=500&width=600"
-                  alt="PulseNet Infrastructure"
-                  className="w-full h-auto"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent" />
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-2xl font-bold mb-2">State-of-the-Art Infrastructure</h3>
-                  <p className="text-blue-100">Fiber optic network spanning across Kenya</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission, Vision, Values */}
-      <section className="py-20 bg-gray-50" data-section>
-        <div className="container mx-auto px-4">
+      {/* Enhanced Stats Section */}
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50/30" data-section>
+        <div className="container mx-auto px-6">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Foundation</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built on strong principles that guide everything we do
-            </p>
+            <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200 px-4 py-2 text-sm font-medium">
+              Our Impact
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Transforming Kenya's Digital Landscape
+            </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                icon: Target,
-                title: "Our Mission",
-                description:
-                  "To provide reliable, affordable, and high-speed internet connectivity that empowers individuals and businesses to thrive in the digital age.",
-                color: "bg-blue-500",
-              },
-              {
-                icon: Eye,
-                title: "Our Vision",
-                description:
-                  "To be Kenya's leading fiber internet service provider, connecting every home and business with world-class internet infrastructure.",
-                color: "bg-purple-500",
-              },
-              {
-                icon: Award,
-                title: "Our Promise",
-                description:
-                  "Excellence, integrity, innovation, and customer-centricity guide everything we do as we build lasting relationships with our community.",
-                color: "bg-green-500",
-              },
-            ].map((item, index) => {
-              const Icon = item.icon
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
+                  className="group"
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
+                  whileHover={{ y: -8 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-8 text-center">
-                      <div
-                        className={`w-16 h-16 ${item.color} rounded-full flex items-center justify-center mx-auto mb-6`}
+                  <Card className="text-center p-8 h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-white group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-blue-50">
+                    <CardContent className="p-0">
+                      <motion.div 
+                        className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.6 }}
                       >
                         <Icon className="w-8 h-8 text-white" />
+                      </motion.div>
+                      <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                        <AnimatedCounter end={stat.number} suffix={stat.suffix} />
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                      <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                      <p className="text-gray-600 font-medium text-lg">{stat.label}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
               )
             })}
           </div>
+        </div>
+      </section>
 
-          {/* Values Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Story Section */}
+      <section className="py-24" data-section>
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="mb-6 bg-purple-100 text-purple-700 hover:bg-purple-200 px-4 py-2">Our Journey</Badge>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
+                Bridging the Digital Divide,{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                  One Connection at a Time
+                </span>
+              </h2>
+
+              <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+                <p>
+                  Born from a vision to democratize internet access across Kenya, PulseNet emerged as a catalyst for
+                  digital transformation. We recognized that reliable, high-speed internet isn't just a utility— it's
+                  the foundation for economic growth, education, and social progress.
+                </p>
+                <p>
+                  Our journey began with a simple belief: every Kenyan deserves access to world-class internet
+                  infrastructure. Today, we're proud to serve over 500 customers across 5+ areas, delivering not
+                  just connectivity, but possibilities.
+                </p>
+                <p>
+                  Through strategic partnerships, cutting-edge technology, and an unwavering commitment to excellence,
+                  we've built more than a network—we've built bridges to the future.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-6 mt-8">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4">
+                    Learn More About Our Impact
+                  </Button>
+                </motion.div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span className="font-medium">ISO 27001 Certified</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
+              <div className="relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-auto rounded-3xl"
+                    poster="/background1.gif"
+                  >
+                    <source src="/background1.mp4" type="video/mp4" />
+                    <source src="/background1.gif" type="image/gif" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2">Modern Infrastructure</h3>
+                    <p className="text-blue-100">Fiber optic network growing across Nairobi</p>
+                  </div>
+                  {/* Overlay to hide watermark */}
+                  <div
+                    className="absolute bottom-4 right-3 bg-white/100 rounded-full py-2"
+                    style={{ minWidth: '60px', minHeight: '28px' }}
+                  />
+                </div>
+                <motion.div 
+                  className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl flex items-center justify-center shadow-xl"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="text-center text-white">
+                    <div className="text-2xl font-bold">2+</div>
+                    <div className="text-sm">Years</div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50/30" data-section>
+        <div className="container mx-auto px-6">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200 px-4 py-2">
+              Our Foundation
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Values That Drive Excellence</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our core principles guide every decision, innovation, and interaction as we build Kenya's digital future.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => {
               const Icon = value.icon
               return (
                 <motion.div
                   key={index}
                   className="group"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -10 }}
                 >
-                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-0 bg-white group-hover:bg-gray-50">
-                    <CardContent className="p-6 text-center">
-                      <div
-                        className={`w-12 h-12 ${value.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 h-full">
+                    <CardContent className="p-8 text-center">
+                      <motion.div
+                        className={`w-16 h-16 bg-gradient-to-br ${value.gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.6 }}
                       >
-                        <Icon className="w-6 h-6 text-white" />
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h4>
-                      <p className="text-sm text-gray-600">{value.description}</p>
+                        <Icon className="w-8 h-8 text-white" />
+                      </motion.div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{value.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -381,101 +481,67 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20" data-section>
-        <div className="container mx-auto px-4">
+      <section className="py-24" data-section>
+        <div className="container mx-auto px-6">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+            <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-200 px-4 py-2">Our Milestones</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">A Journey of Innovation</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Key milestones that shaped PulseNet into what it is today
+              Key moments that shaped PulseNet into Kenya's leading fiber internet provider.
             </p>
           </motion.div>
 
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200"></div>
+          <div className="relative max-w-4xl mx-auto">
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
 
-            {milestones.map((milestone, index) => {
-              const Icon = milestone.icon
-              return (
-                <motion.div
-                  key={index}
-                  className={`relative flex items-center mb-12 ${index % 2 === 0 ? "justify-start" : "justify-end"}`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className={`w-5/12 ${index % 2 === 0 ? "pr-8" : "pl-8"}`}>
-                    <Card className="hover:shadow-lg transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                            <Icon className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">{milestone.year}</Badge>
-                          </div>
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{milestone.title}</h3>
-                        <p className="text-gray-600">{milestone.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-lg"></div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20 bg-gray-50" data-section>
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Leadership</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The passionate team driving PulseNet's mission forward
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
+            {timeline.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`relative flex items-center mb-16 ${index % 2 === 0 ? "justify-start" : "justify-end"}`}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -10 }}
               >
-                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
-                  <div className="relative">
-                    <img
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-blue-600 font-medium mb-3">{member.role}</p>
-                    <p className="text-gray-600 text-sm">{member.bio}</p>
-                  </CardContent>
-                </Card>
+                <div className={`w-5/12 ${index % 2 === 0 ? "pr-12" : "pl-12"}`}>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <Card className="hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-4 mb-4">
+                          <motion.div
+                            className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center text-white font-bold shadow-lg`}
+                            whileHover={{ scale: 1.1, rotate: 360 }}
+                            transition={{ duration: 0.6 }}
+                          >
+                            {item.year.slice(-2)}
+                          </motion.div>
+                          <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-200">{item.year}</Badge>
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                        <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
+                        <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
+                          <CheckCircle className="w-4 h-4" />
+                          {item.achievement}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </div>
+
+                <motion.div 
+                  className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-white border-4 border-blue-500 rounded-full shadow-lg"
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                />
               </motion.div>
             ))}
           </div>
@@ -483,30 +549,83 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-700">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-24 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
+        <div className="container mx-auto px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Experience the PulseNet Difference?</h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Join thousands of satisfied customers who trust PulseNet for their internet needs. Get connected today and
-              experience the speed of tomorrow.
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+              Ready to Experience the{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                Future?
+              </span>
+            </h2>
+            <p className="text-2xl text-blue-100 mb-12 leading-relaxed">
+              Join over 500 satisfied customers who trust PulseNet for lightning-fast, reliable internet that powers
+              their digital lives.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                Check Coverage in Your Area
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                Contact Our Team
-              </Button>
+                <Link href="/coverage">
+                  <Button
+                    size="lg"
+                    className="bg-white text-gray-900 hover:bg-gray-100 shadow-2xl px-12 py-6 text-xl font-semibold"
+                  >
+                    Check Your Coverage
+                    <ArrowRight className="w-6 h-6 ml-3" />
+                  </Button>
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-white text-white hover:bg-white hover:text-gray-900 bg-transparent px-12 py-6 text-xl font-semibold"
+                >
+                  Schedule Installation
+                </Button>
+              </motion.div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-8 text-blue-200">
+              <motion.div 
+                className="flex items-center gap-2"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <span>Free Installation</span>
+              </motion.div>
+              <motion.div 
+                className="flex items-center gap-2"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <span>24/7 Support</span>
+              </motion.div>
+              <motion.div 
+                className="flex items-center gap-2"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <span>30-Day Guarantee</span>
+              </motion.div>
             </div>
           </motion.div>
         </div>
