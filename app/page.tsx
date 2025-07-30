@@ -41,13 +41,13 @@ export default function PulseNetHomePage() {
               <Phone className="w-4 h-4" />
               <span className="font-medium">0746 406 499</span>
             </div>
-             <div className="flex items-center space-x-2 text-blue-700">
+            <div className="flex items-center space-x-2 text-blue-700">
               <Phone className="w-4 h-4" />
-              <span className="font-medium">07** *** ***</span>
+              <span className="font-medium">0746 406 499</span>
             </div>
             <div className="flex items-center space-x-2 text-green-600">
               <MessageCircle className="w-4 h-4" />
-              <span className="font-medium">07********</span>
+              <span className="font-medium">0746 406 499</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -304,13 +304,14 @@ export default function PulseNetHomePage() {
 
       {/* WhatsApp Floating Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="lg"
-          className="bg-green-500 hover:bg-green-600 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <MessageCircle className="w-8 h-8" />
-        </Button>
-        <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">Message us</div>
+        <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+          <Button
+            size="lg"
+            className="bg-green-500 hover:bg-green-600 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <MessageCircle className="w-8 h-8" />
+          </Button>
+        </Link>
       </div>
 
       {/* Footer */}
