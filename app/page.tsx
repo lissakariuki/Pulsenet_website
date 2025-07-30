@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -14,10 +16,19 @@ import {
   Users,
   Zap,
   Wifi,
+  Search,
+  ChevronDown,
+  HelpCircle,
+  Clock,
+  Router,
+  CreditCard,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Badge } from "@/components/ui/badge"
 
 export default function PulseNetHomePage() {
   return (
@@ -287,43 +298,8 @@ export default function PulseNetHomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">Frequently Asked Questions</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Find answers to common questions about PulseNet's internet services.</p>
-          </div>
-          <div className="max-w-2xl mx-auto space-y-4">
-            {[
-              {
-                q: "How long does installation take?",
-                a: "Standard installation is completed within 24-48 hours after signup.",
-              },
-              {
-                q: "Is there a data cap on any plan?",
-                a: "No, all our plans offer unlimited data usage with no hidden limits.",
-              },
-              {
-                q: "How do I get support if I have an issue?",
-                a: "You can reach our 24/7 support team via phone, WhatsApp, or the support form on our website.",
-              },
-              {
-                q: "Can I upgrade or downgrade my plan?",
-                a: "Yes, you can change your plan at any time by contacting our support team.",
-              },
-              {
-                q: "What payment methods are accepted?",
-                a: "We accept M-Pesa, bank transfer, and online payments through our customer portal.",
-              },
-              {
-                q: "Do you provide a free router?",
-                a: "A free router is included with our Premium plan. Other plans include free installation.",
-              },
-            ].map((item, idx) => (
-              <AccordionItem key={idx} question={item.q} answer={item.a} />
-            ))}
-          </div>
-        </div>
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+        <FAQSection />
       </section>
 
       {/* WhatsApp Floating Button */}
@@ -392,15 +368,82 @@ export default function PulseNetHomePage() {
   )
 }
 
-// AccordionItem component
-function AccordionItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false)
+// FAQAccordion component
+function FAQAccordion() {
+  const faqs = [
+    {
+      q: "How long does installation take?",
+      a: "Standard installation is completed within 24-48 hours after signup.",
+    },
+    {
+      q: "Is there a data cap on any plan?",
+      a: "No, all our plans offer unlimited data usage with no hidden limits.",
+    },
+    {
+      q: "How do I get support if I have an issue?",
+      a: "You can reach our 24/7 support team via phone, WhatsApp, or the support form on our website.",
+    },
+    {
+      q: "Can I upgrade or downgrade my plan?",
+      a: "Yes, you can change your plan at any time by contacting our support team.",
+    },
+    {
+      q: "What payment methods are accepted?",
+      a: "We accept M-Pesa, bank transfer, and online payments through our customer portal.",
+    },
+    {
+      q: "Do you provide a free router?",
+      a: "A free router is included with our Premium plan. Other plans include free installation.",
+    },
+  ];
+  const [search, setSearch] = useState("");
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const filteredFaqs = faqs.filter(faq =>
+    faq.q.toLowerCase().includes(search.toLowerCase()) ||
+    faq.a.toLowerCase().includes(search.toLowerCase())
+  );
   return (
-    <div className="border rounded-lg bg-white shadow-sm">
+    <div className="max-w-2xl mx-auto">
+      <div className="mb-6 sticky top-0 z-10 bg-gray-50 pb-2">
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search FAQs..."
+          className="w-full rounded-lg border border-blue-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
+          aria-label="Search FAQs"
+        />
+      </div>
+      <ul className="space-y-4">
+        {filteredFaqs.length === 0 && (
+          <li className="text-center text-gray-500 py-8">No FAQs found for your search.</li>
+        )}
+        {filteredFaqs.map((item, idx) => (
+          <li key={idx}>
+            <AccordionItem
+              question={item.q}
+              answer={item.a}
+              open={openIdx === idx}
+              onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+              id={`faq-${idx}`}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// AccordionItem component
+function AccordionItem({ question, answer, open, onClick, id }: { question: string; answer: string; open: boolean; onClick: () => void; id: string }) {
+  return (
+    <div className={`border rounded-xl bg-white shadow-md transition-all duration-200 ${open ? 'ring-2 ring-blue-400' : 'hover:shadow-lg'}`}> 
       <button
-        className="w-full flex justify-between items-center px-6 py-4 text-left text-blue-900 font-semibold focus:outline-none focus:ring"
-        onClick={() => setOpen((v) => !v)}
+        className="w-full flex justify-between items-center px-6 py-4 text-left text-blue-900 font-semibold focus:outline-none focus:ring rounded-xl"
+        onClick={onClick}
         aria-expanded={open}
+        aria-controls={id + '-panel'}
+        id={id + '-button'}
       >
         <span>{question}</span>
         <svg
@@ -412,11 +455,281 @@ function AccordionItem({ question, answer }: { question: string; answer: string 
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {open && (
-        <div className="px-6 pb-4 text-gray-700 animate-fade-in">
-          {answer}
+      <div
+        id={id + '-panel'}
+        role="region"
+        aria-labelledby={id + '-button'}
+        className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-40 py-2 px-6' : 'max-h-0 py-0 px-6'}`}
+        style={{
+          transitionProperty: 'max-height, padding',
+        }}
+      >
+        <div className={`text-gray-700 text-base ${open ? 'opacity-100' : 'opacity-0'}`}>{answer}</div>
+      </div>
+    </div>
+  );
+}
+
+const faqData = [
+  {
+    id: 1,
+    category: "Installation",
+    question: "How long does installation take?",
+    answer:
+      "Standard installation is completed within 24-48 hours after signup. Our professional technicians will contact you to schedule a convenient time that works with your schedule.",
+    icon: Clock,
+    popular: true,
+  },
+  {
+    id: 2,
+    category: "Plans",
+    question: "Is there a data cap on any plan?",
+    answer:
+      "No, all our plans offer unlimited data usage with no hidden limits. Stream, game, and browse as much as you want without worrying about overage charges.",
+    icon: Zap,
+    popular: true,
+  },
+  {
+    id: 3,
+    category: "Support",
+    question: "How do I get support if I have an issue?",
+    answer:
+      "You can reach our 24/7 support team via phone, WhatsApp, live chat, or through the support form on our website. Our average response time is under 5 minutes.",
+    icon: Phone,
+    popular: true,
+  },
+  {
+    id: 4,
+    category: "Plans",
+    question: "Can I upgrade or downgrade my plan?",
+    answer:
+      "Yes, you can change your plan at any time through your customer portal or by contacting our support team. Changes take effect on your next billing cycle with no additional fees.",
+    icon: Router,
+    popular: false,
+  },
+  {
+    id: 5,
+    category: "Billing",
+    question: "What payment methods are accepted?",
+    answer:
+      "We accept all major credit cards, debit cards, bank transfers, and digital wallets including PayPal, Apple Pay, and Google Pay. Auto-pay discounts are available.",
+    icon: CreditCard,
+    popular: false,
+  },
+  {
+    id: 6,
+    category: "Equipment",
+    question: "Do you provide a free router?",
+    answer:
+      "Yes, we provide a high-performance Wi-Fi 6 router at no additional cost with all our plans. The router includes advanced security features and parental controls.",
+    icon: Shield,
+    popular: false,
+  },
+  {
+    id: 7,
+    category: "Installation",
+    question: "Is professional installation required?",
+    answer:
+      "Professional installation is included free with all plans and is highly recommended for optimal performance. However, self-installation kits are available for tech-savvy customers.",
+    icon: HelpCircle,
+    popular: false,
+  },
+  {
+    id: 8,
+    category: "Support",
+    question: "What if I'm not satisfied with the service?",
+    answer:
+      "We offer a 30-day money-back guarantee. If you're not completely satisfied, you can cancel within 30 days for a full refund, no questions asked.",
+    icon: Shield,
+    popular: false,
+  },
+]
+
+const categories = ["All", "Installation", "Plans", "Support", "Billing", "Equipment"]
+
+function FAQSection() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [openItems, setOpenItems] = useState<number[]>([])
+
+  const filteredFAQs = faqData.filter((faq) => {
+    const matchesSearch =
+      faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "All" || faq.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  const popularFAQs = faqData.filter((faq) => faq.popular)
+
+  const toggleItem = (id: number) => {
+    setOpenItems((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]))
+  }
+
+  return (
+    <div className="container mx-auto px-4 max-w-4xl">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <HelpCircle className="w-4 h-4" />
+          Support Center
+        </div>
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Find answers to common questions about PulseNet's internet services and get the help you need.
+        </p>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="mb-8 space-y-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Input
+            type="text"
+            placeholder="Search frequently asked questions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 h-12 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl"
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-2 justify-center">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category)}
+              className="rounded-full"
+              size="sm"
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Popular Questions */}
+      {searchTerm === "" && selectedCategory === "All" && (
+        <div className="mb-12">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+            <Zap className="w-6 h-6 text-yellow-500" />
+            Most Popular Questions
+          </h3>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {popularFAQs.map((faq) => {
+              const Icon = faq.icon
+              return (
+                <div
+                  key={faq.id}
+                  className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => toggleItem(faq.id)}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Icon className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-2 leading-tight">{faq.question}</h4>
+                      <Badge variant="secondary" className="text-xs">
+                        {faq.category}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
+
+      {/* FAQ List */}
+      <div className="space-y-4">
+        {searchTerm !== "" || selectedCategory !== "All" ? (
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+            {filteredFAQs.length} {filteredFAQs.length === 1 ? "Result" : "Results"} Found
+          </h3>
+        ) : (
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6">All Questions</h3>
+        )}
+
+        {filteredFAQs.length === 0 ? (
+          <div className="text-center py-12">
+            <HelpCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h4 className="text-xl font-semibold text-gray-600 mb-2">No questions found</h4>
+            <p className="text-gray-500">Try adjusting your search terms or category filter.</p>
+          </div>
+        ) : (
+          filteredFAQs.map((faq) => {
+            const Icon = faq.icon
+            const isOpen = openItems.includes(faq.id)
+
+            return (
+              <Collapsible key={faq.id} open={isOpen} onOpenChange={() => toggleItem(faq.id)}>
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+                  <CollapsibleTrigger className="w-full p-6 text-left hover:bg-gray-50 rounded-xl transition-colors">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="bg-blue-100 p-2 rounded-lg shrink-0">
+                          <Icon className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline" className="text-xs">
+                              {faq.category}
+                            </Badge>
+                            {faq.popular && (
+                              <Badge className="text-xs bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+                                Popular
+                              </Badge>
+                            )}
+                          </div>
+                          <h4 className="font-semibold text-gray-900 text-lg leading-tight">{faq.question}</h4>
+                        </div>
+                      </div>
+                      <ChevronDown
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 shrink-0 ${
+                          isOpen ? "transform rotate-180" : ""
+                        }`}
+                      />
+                    </div>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="px-6 pb-6">
+                      <div className="ml-16 pt-2 border-t border-gray-100">
+                        <p className="text-gray-700 leading-relaxed mt-4">{faq.answer}</p>
+                      </div>
+                    </div>
+                  </CollapsibleContent>
+                </div>
+              </Collapsible>
+            )
+          })
+        )}
+      </div>
+
+      {/* Contact Support CTA */}
+      <div className="mt-16 text-center">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+          <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+            Our support team is available 24/7 to help you with any questions or concerns you may have.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+              <Phone className="w-5 h-5 mr-2" />
+              Call Support
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+            >
+              <HelpCircle className="w-5 h-5 mr-2" />
+              Live Chat
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

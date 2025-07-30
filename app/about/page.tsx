@@ -1,302 +1,516 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+"use client";
+
+import { useState, useEffect } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
 import {
-  Phone,
-  MessageCircle,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
   Wifi,
   Users,
+  MapPin,
   Award,
   Target,
+  Eye,
   Heart,
+  ChevronDown,
+  Play,
+  Calendar,
+  TrendingUp,
   Shield,
+  Zap,
+  Globe,
 } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+// You need to create these components or use your own
+import { AnimatedCounter } from "@/components/animated-counter"
+import { FloatingElements } from "@/components/floating-elements"
+
+const milestones = [
+  {
+    year: "2018",
+    title: "Company Founded",
+    description: "Started with a vision to bridge Kenya's digital divide",
+    icon: Calendar,
+  },
+  {
+    year: "2019",
+    title: "First 1,000 Customers",
+    description: "Reached our first major milestone in customer growth",
+    icon: Users,
+  },
+  {
+    year: "2021",
+    title: "Network Expansion",
+    description: "Expanded fiber network to 15 major cities across Kenya",
+    icon: MapPin,
+  },
+  {
+    year: "2023",
+    title: "50,000+ Connected",
+    description: "Serving over 50,000 homes and businesses nationwide",
+    icon: TrendingUp,
+  },
+]
+
+const teamMembers = [
+  {
+    name: "Sarah Kimani",
+    role: "Chief Executive Officer",
+    image: "/placeholder.svg?height=300&width=300",
+    bio: "15+ years in telecommunications with a passion for digital inclusion",
+  },
+  {
+    name: "David Ochieng",
+    role: "Chief Technology Officer",
+    image: "/placeholder.svg?height=300&width=300",
+    bio: "Network infrastructure expert with extensive fiber optic experience",
+  },
+  {
+    name: "Grace Wanjiku",
+    role: "Head of Customer Success",
+    image: "/placeholder.svg?height=300&width=300",
+    bio: "Dedicated to ensuring exceptional customer experiences and satisfaction",
+  },
+]
+
+const values = [
+  {
+    icon: Shield,
+    title: "Reliability",
+    description: "99.9% uptime guarantee with enterprise-grade infrastructure",
+    color: "bg-blue-500",
+  },
+  {
+    icon: Zap,
+    title: "Innovation",
+    description: "Cutting-edge technology to deliver the fastest speeds",
+    color: "bg-yellow-500",
+  },
+  {
+    icon: Heart,
+    title: "Community",
+    description: "Building stronger communities through better connectivity",
+    color: "bg-red-500",
+  },
+  {
+    icon: Globe,
+    title: "Accessibility",
+    description: "Making high-speed internet accessible to everyone",
+    color: "bg-green-500",
+  },
+]
 
 export default function AboutPage() {
+  const { scrollYProgress } = useScroll()
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const [activeSection, setActiveSection] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section[data-section]")
+      const scrollPosition = window.scrollY + window.innerHeight / 2
+
+      sections.forEach((section, index) => {
+        const element = section as HTMLElement
+        if (scrollPosition >= element.offsetTop && scrollPosition < element.offsetTop + element.offsetHeight) {
+          setActiveSection(index)
+        }
+      })
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Contact Bar 
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 py-2 px-4">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
-          <div className="flex items-center space-x-6 mb-2 sm:mb-0">
-            <div className="flex items-center space-x-2 text-blue-700">
-              <Phone className="w-4 h-4" />
-              <span className="font-medium">0746 406 499</span>
-            </div>
-            <div className="flex items-center space-x-2 text-blue-700">
-              <Phone className="w-4 h-4" />
-              <span className="font-medium">+++++++</span>
-            </div>
-            <div className="flex items-center space-x-2 text-green-600">
-              <MessageCircle className="w-4 h-4" />
-              <span className="font-medium">+++++</span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-full">
-              Coverage
-            </Button>
-            <div className="flex space-x-2">
-              <Link href="#" className="text-blue-600 hover:text-blue-800">
-                <Facebook className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="text-blue-600 hover:text-blue-800">
-                <Twitter className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="text-blue-600 hover:text-blue-800">
-                <Instagram className="w-4 h-4" />
-              </Link>
-              <Link href="#" className="text-blue-600 hover:text-blue-800">
-                <Linkedin className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-                <Wifi className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <Wifi className="w-5 h-5 text-white" />
               </div>
-              <div>
-              <h1 className="text-xl font-bold text-blue-900">PULSENET</h1>
-              <p className="text-xs text-blue-600 uppercase tracking-wide">Bringing Fast Fiber to Your Doorstep</p>
-              </div>
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-blue-700 hover:text-blue-900 font-medium">Home</Link>
-              <Link href="/about" className="text-blue-700 hover:text-blue-900 font-medium">About</Link>
-              <Link href="/coverage" className="text-blue-700 hover:text-blue-900 font-medium">Our Coverage</Link>
-              <Link href="/contact" className="text-blue-700 hover:text-blue-900 font-medium">Contact</Link>
+              <span className="text-xl font-bold text-gray-900">PulseNet</span>
             </div>
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Home
+              </a>
+              <a href="#" className="text-blue-600 font-medium">
+                About
+              </a>
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Coverage
+              </a>
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Contact
+              </a>
+            </div>
+            <Button className="bg-blue-600 hover:bg-blue-700">Get Connected</Button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"></div>
-        <div className="relative container mx-auto px-4 py-20">
-          <div className="text-center text-white">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">About PulseNet</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Connecting communities across Kenya with reliable, high-speed fiber internet solutions
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800"
+          style={{ y }}
+        />
+        <FloatingElements />
+
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <Badge className="mb-6 bg-white/20 text-white border-white/30 hover:bg-white/30">
+              Connecting Kenya Since 2018
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              About{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                PulseNet
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Bridging the digital divide across Kenya with reliable, high-speed fiber internet that empowers
+              communities to thrive in the digital age.
             </p>
-          </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Our Story
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+              >
+                Explore Coverage
+              </Button>
+            </div>
+          </motion.div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" className="w-full h-20 fill-white">
-            <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
-          </svg>
+
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+        >
+          <ChevronDown className="w-8 h-8 text-white/70" />
+        </motion.div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 bg-gray-50" data-section>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { number: 50000, suffix: "+", label: "Happy Customers" },
+              { number: 25, suffix: "+", label: "Cities Covered" },
+              { number: 99.9, suffix: "%", label: "Uptime Guarantee" },
+              { number: 1000, suffix: "Mbps", label: "Max Speed" },
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
+                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
+                </div>
+                <p className="text-gray-600 font-medium">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="py-20 bg-white">
+      {/* Our Story Section */}
+      <section className="py-20" data-section>
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-blue-900 mb-6">Our Story</h2>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Founded with a vision to bridge the digital divide in Kenya, PulseNet has been at the forefront of
-                providing reliable, high-speed fiber internet solutions to homes and businesses across the country.
-              </p>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Since our inception, we've connected thousands of customers, enabling them to work, learn, and stay
-                connected with the world. Our commitment to excellence and customer satisfaction has made us a trusted
-                name in the telecommunications industry.
-              </p>
-              <p className="text-gray-600 leading-relaxed">
-                We believe that fast, reliable internet is not a luxury but a necessity in today's digital world. That's
-                why we continue to expand our network and improve our services to reach every corner of Kenya.
-              </p>
-            </div>
-            <div className="relative">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="rounded-lg shadow-lg w-full h-auto"
-                poster="/router.gif"
-              >
-                <source src="/pulse.mp4" type="video/mp4" />
-                <source src="/router.gif" type="image/gif" />
-                Your browser does not support the video tag.
-              </video>
-              {/* Overlay to hide watermark */}
-              <div
-                className="absolute bottom-4 right-3 bg-white/100 rounded-full py-2"
-                style={{ minWidth: '60px', minHeight: '28px' }}
-              />
-            </div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">Our Journey</Badge>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Connecting Communities, One Fiber at a Time</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed">
+                <p>
+                  Founded with a vision to bridge the digital divide in Kenya, PulseNet has been at the forefront of
+                  providing reliable, high-speed fiber internet solutions to homes and businesses across the country.
+                </p>
+                <p>
+                  Since our inception, we've connected thousands of customers, enabling them to work, learn, and stay
+                  connected with the world. Our commitment to excellence and customer satisfaction has made us a trusted
+                  name in the telecommunications industry.
+                </p>
+                <p>
+                  We believe that fast, reliable internet is not a luxury but a necessity in today's digital world.
+                  That's why we continue to expand our network and improve our services to reach every corner of Kenya.
+                </p>
+              </div>
+              <Button className="mt-6 bg-blue-600 hover:bg-blue-700">Learn More About Our Impact</Button>
+            </motion.div>
+
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="/placeholder.svg?height=500&width=600"
+                  alt="PulseNet Infrastructure"
+                  className="w-full h-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent" />
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">State-of-the-Art Infrastructure</h3>
+                  <p className="text-blue-100">Fiber optic network spanning across Kenya</p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Mission, Vision, Values */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50" data-section>
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center p-8 border-0 shadow-lg">
-              <CardContent className="space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <Target className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-2xl font-bold text-blue-900">Our Mission</h3>
-                <p className="text-gray-600">
-                  To provide reliable, affordable, and high-speed internet connectivity that empowers individuals and
-                  businesses to thrive in the digital age.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-8 border-0 shadow-lg">
-              <CardContent className="space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <Award className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-2xl font-bold text-blue-900">Our Vision</h3>
-                <p className="text-gray-600">
-                  To be Kenya's leading fiber internet service provider, connecting every home and business with
-                  world-class internet infrastructure.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-8 border-0 shadow-lg">
-              <CardContent className="space-y-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                  <Heart className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-2xl font-bold text-blue-900">Our Values</h3>
-                <p className="text-gray-600">
-                  Excellence, integrity, innovation, and customer-centricity guide everything we do as we build lasting
-                  relationships with our community.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">Why Choose PulseNet?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              We're committed to providing the best internet experience with unmatched service quality
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Foundation</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Built on strong principles that guide everything we do
             </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                icon: Target,
+                title: "Our Mission",
+                description:
+                  "To provide reliable, affordable, and high-speed internet connectivity that empowers individuals and businesses to thrive in the digital age.",
+                color: "bg-blue-500",
+              },
+              {
+                icon: Eye,
+                title: "Our Vision",
+                description:
+                  "To be Kenya's leading fiber internet service provider, connecting every home and business with world-class internet infrastructure.",
+                color: "bg-purple-500",
+              },
+              {
+                icon: Award,
+                title: "Our Promise",
+                description:
+                  "Excellence, integrity, innovation, and customer-centricity guide everything we do as we build lasting relationships with our community.",
+                color: "bg-green-500",
+              },
+            ].map((item, index) => {
+              const Icon = item.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-8 text-center">
+                      <div
+                        className={`w-16 h-16 ${item.color} rounded-full flex items-center justify-center mx-auto mb-6`}
+                      >
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto">
-                <Shield className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-blue-900">Reliable Network</h3>
-              <p className="text-gray-600">99.9% uptime guarantee with redundant infrastructure</p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto">
-                <Users className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-blue-900">Expert Support</h3>
-              <p className="text-gray-600">24/7 technical support from certified professionals</p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto">
-                <Award className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-blue-900">Quality Service</h3>
-              <p className="text-gray-600">Award-winning customer service and satisfaction</p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto">
-                <Wifi className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-blue-900">Fast Installation</h3>
-              <p className="text-gray-600">Quick and professional installation within 24-48 hours</p>
-            </div>
+          {/* Values Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => {
+              const Icon = value.icon
+              return (
+                <motion.div
+                  key={index}
+                  className="group"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                >
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-0 bg-white group-hover:bg-gray-50">
+                    <CardContent className="p-6 text-center">
+                      <div
+                        className={`w-12 h-12 ${value.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h4>
+                      <p className="text-sm text-gray-600">{value.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      {/* WhatsApp Floating Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="lg"
-          className="bg-green-500 hover:bg-green-600 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <MessageCircle className="w-8 h-8" />
-        </Button>
-        <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs rounded-full px-2 py-1">Message us</div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-blue-900 text-white py-12">
+      {/* Timeline Section */}
+      <section className="py-20" data-section>
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Wifi className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-xl font-bold">PULSENET</h3>
-              </div>
-              <p className="text-blue-200">Connecting you to the world with reliable, high-speed fiber internet.</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <div className="space-y-2">
-                <Link href="/" className="block text-blue-200 hover:text-white">Home</Link>
-                <Link href="/coverage" className="block text-blue-200 hover:text-white">Coverage</Link>
-                <Link href="/contact" className="block text-blue-200 hover:text-white">Contact</Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-2">
-                <Link href="#" className="block text-blue-200 hover:text-white">
-                  Help Center
-                </Link>
-                <Link href="#" className="block text-blue-200 hover:text-white">
-                  Contact Us
-                </Link>
-                <Link href="#" className="block text-blue-200 hover:text-white">
-                  Technical Support
-                </Link>
-                <Link href="#" className="block text-blue-200 hover:text-white">
-                  Installation
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contact Info</h4>
-              <div className="space-y-2 text-blue-200">
-                <p>📞 0746 406 499</p>
-                <p>📧 <a href="mailto:info@pulsenet.co.ke" className="text-blue-200 hover:text-white">info@pulsenet.co.ke</a></p>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-blue-800 mt-8 pt-8 text-center text-blue-200">
-            <p>&copy; 2025 PulseNet. All rights reserved.</p>
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Key milestones that shaped PulseNet into what it is today
+            </p>
+          </motion.div>
+
+          <div className="relative">
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200"></div>
+
+            {milestones.map((milestone, index) => {
+              const Icon = milestone.icon
+              return (
+                <motion.div
+                  key={index}
+                  className={`relative flex items-center mb-12 ${index % 2 === 0 ? "justify-start" : "justify-end"}`}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div className={`w-5/12 ${index % 2 === 0 ? "pr-8" : "pl-8"}`}>
+                    <Card className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                            <Icon className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">{milestone.year}</Badge>
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{milestone.title}</h3>
+                        <p className="text-gray-600">{milestone.description}</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-lg"></div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Team Section */}
+      <section className="py-20 bg-gray-50" data-section>
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Leadership</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              The passionate team driving PulseNet's mission forward
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {teamMembers.map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10 }}
+              >
+                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="relative">
+                    <img
+                      src={member.image || "/placeholder.svg"}
+                      alt={member.name}
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
+                    <p className="text-blue-600 font-medium mb-3">{member.role}</p>
+                    <p className="text-gray-600 text-sm">{member.bio}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-700">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-white mb-6">Ready to Experience the PulseNet Difference?</h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+              Join thousands of satisfied customers who trust PulseNet for their internet needs. Get connected today and
+              experience the speed of tomorrow.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                Check Coverage in Your Area
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+              >
+                Contact Our Team
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   )
 }
