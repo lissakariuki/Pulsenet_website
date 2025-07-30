@@ -138,12 +138,16 @@ export default function PulseNetHomePage() {
                 </div>
               </div>
 
-              <Button
-                size="lg"
-                className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Get Connected
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    size="lg"
+                    className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    Get Connected
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <div className="relative">
@@ -241,9 +245,11 @@ export default function PulseNetHomePage() {
                   <li className="flex items-center gap-2 text-blue-800"><Check className="w-4 h-4" /> Free Install</li>
                   <li className="flex items-center gap-2 text-blue-800"><Check className="w-4 h-4" /> 24/7 Support</li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
-                  GET CONNECTED
-                </Button>
+                <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
+                    GET CONNECTED
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
             {/* Standard Plan */}
@@ -264,9 +270,11 @@ export default function PulseNetHomePage() {
                   <li className="flex items-center gap-2 text-green-800"><Check className="w-4 h-4" /> Free Install</li>
                   <li className="flex items-center gap-2 text-green-800"><Check className="w-4 h-4" /> 24/7 Support</li>
                 </ul>
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
-                  GET CONNECTED
-                </Button>
+                <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
+                    GET CONNECTED
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
             {/* Premium Plan */}
@@ -288,9 +296,11 @@ export default function PulseNetHomePage() {
                   <li className="flex items-center gap-2 text-purple-800"><Check className="w-4 h-4" /> Free Install</li>
                   <li className="flex items-center gap-2 text-purple-800"><Check className="w-4 h-4" /> 24/7 Support</li>
                 </ul>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
-                  GET CONNECTED
-                </Button>
+                <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-auto">
+                    GET CONNECTED
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

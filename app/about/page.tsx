@@ -172,9 +172,11 @@ export default function AboutPage() {
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
-                  Get Connected
-                </Button>
+                <Link href="https://wa.me/254746406499" target="_blank" rel="noopener noreferrer">
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
+                    Get Connected
+                  </Button>
+                </Link>
               </motion.div>
 
               <button 
@@ -369,9 +371,11 @@ export default function AboutPage() {
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4">
-                    Learn More About Our Impact
-                  </Button>
+                  <Link href="#values">
+                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4">
+                      Learn More About Our Impact
+                    </Button>
+                  </Link>
                 </motion.div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <CheckCircle className="w-5 h-5 text-green-500" />
@@ -429,7 +433,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50/30" data-section>
+      <section id="values" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50/30" data-section>
         <div className="container mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -591,13 +595,15 @@ export default function AboutPage() {
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-gray-900 bg-transparent px-12 py-6 text-xl font-semibold"
-                >
-                  Schedule Installation
-                </Button>
+                <Link href="/contact">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-white text-white hover:bg-white hover:text-gray-900 bg-transparent px-12 py-6 text-xl font-semibold"
+                  >
+                    Schedule Installation
+                  </Button>
+                </Link>
               </motion.div>
             </div>
 
