@@ -262,56 +262,6 @@ export default function CoveragePage() {
         </div>
       </section>
 
-      {/* Check Availability */}
-      <section className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
-        <div className="container mx-auto px-6 relative z-10">
-          <motion.div
-            className="text-center max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Don't See Your Area?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-              We're constantly expanding our network. Contact us to check availability in your specific location or to
-              express interest for future coverage.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                <Button
-                  size="lg"
-                  className="bg-white text-gray-900 hover:bg-gray-100 shadow-2xl px-8 py-4 text-lg font-semibold"
-                >
-                  Check Availability
-                  <ArrowRight className="w-6 h-6 ml-3" />
-                </Button>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-gray-900 bg-transparent px-8 py-4 text-lg font-semibold"
-                >
-                  Request Coverage
-                </Button>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* WhatsApp Floating Button */}
       <div className="fixed bottom-6 right-6 z-50">
         <motion.div
